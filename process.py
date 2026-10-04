@@ -2,7 +2,8 @@ import random
 from memory import PageTable
 
 class Process:
-    def __init__(self, pid: int, num_virtual_pages: int, working_set_size: int, total_accesses_to_run: int, ws_change_interval: int):
+    def __init__(self, pid: int, num_virtual_pages: int, working_set_size: int, total_accesses_to_run: int, ws_change_interval: int, seed: int = None):
+        self.rng = random.Random(seed)
         self.pid: int = pid
         self.num_virtual_pages: int = num_virtual_pages
         self.page_table: PageTable = PageTable(num_virtual_pages)
@@ -15,18 +16,18 @@ class Process:
 
     def update_working_set(self) -> None:
         pages = list(range(self.num_virtual_pages))
-        self.working_set = random.sample(pages, min(self.working_set_size, self.num_virtual_pages))
+        self.working_set = self.rng.sample(pages, min(self.working_set_size, self.num_virtual_pages))
 
     def generate_memory_request(self) -> tuple[int, str]:
         if self.accesses_done > 0 and self.accesses_done % self.ws_change_interval == 0:
             self.update_working_set()
         self.accesses_done += 1
 
-        if random.random() < 0.90 and self.working_set:
-            vpn = random.choice(self.working_set)
+        if self.rng.random() < 0.90 and self.working_set:
+            vpn = self.rng.choice(self.working_set)
         else:
-            vpn = random.randint(0, self.num_virtual_pages - 1)
-        access_type = 'write' if random.random() < 0.30 else 'read'
+            vpn = self.rng.randint(0, self.num_virtual_pages - 1)
+        access_type = 'write' if self.rng.random() < 0.30 else 'read'
 
         return vpn, access_type
 
