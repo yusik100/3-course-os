@@ -13,15 +13,15 @@ class Process:
         self.ws_change_interval: int = ws_change_interval
         self.update_working_set()
 
-def update_working_set(self) -> None:
+    def update_working_set(self) -> None:
         pages = list(range(self.num_virtual_pages))
         self.working_set = random.sample(pages, min(self.working_set_size, self.num_virtual_pages))
 
-def generate_memory_request(self) -> tuple[int, str]:
+    def generate_memory_request(self) -> tuple[int, str]:
         if self.accesses_done > 0 and self.accesses_done % self.ws_change_interval == 0:
             self.update_working_set()
         self.accesses_done += 1
-        
+
         if random.random() < 0.90 and self.working_set:
             vpn = random.choice(self.working_set)
         else:
@@ -30,5 +30,5 @@ def generate_memory_request(self) -> tuple[int, str]:
 
         return vpn, access_type
 
-def is_finished(self) -> bool:
-    return self.accesses_done >= self.total_accesses_to_run
+    def is_finished(self) -> bool:
+        return self.accesses_done >= self.total_accesses_to_run
