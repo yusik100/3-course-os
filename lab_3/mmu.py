@@ -5,7 +5,6 @@ class PageFaultException(Exception):
         self.vpn: int = vpn
         super().__init__(f"Сторінковий промах для віртуальної сторінки {vpn}")
 
-
 class MMU:
     def __init__(self):
         pass
